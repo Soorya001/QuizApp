@@ -158,7 +158,6 @@ class EvaluateString
 
 
 
-
 public class Playground extends AppCompatActivity {
     int num1 , num2 ;
     int op ;
@@ -294,7 +293,7 @@ public class Playground extends AppCompatActivity {
 
         stoptimertask();
 
-        if(correctAnswer == enteredAnswer)
+        if(correctAnswer == enteredAnswer && qnNoInt <= qnCountInt)
         {
             score += calcScore();
             userScore.setText(score + "");
@@ -304,6 +303,7 @@ public class Playground extends AppCompatActivity {
             TextView scoreDisplay = dialog.findViewById(R.id.scoreDisplay);
             String str = (String) scoreDisplay.getText();
             scoreDisplay.setText(str + Integer.toString(score));
+            qnNoInt += 1;
             dialog.show();
         }
 
@@ -360,10 +360,12 @@ public class Playground extends AppCompatActivity {
             TextView scoreDisplay = dialog.findViewById(R.id.scoreDisplay);
             String str = (String) scoreDisplay.getText();
             scoreDisplay.setText(str + Integer.toString(score));
+            qnNoInt += 1;
             dialog.show();
         }
 
-        if(qnNoInt < qnCountInt) {
+        if(qnNoInt < qnCountInt)
+        {
             remTime = timePerQuestion;
             questionString = generateExpression();
             qnNoInt++;
