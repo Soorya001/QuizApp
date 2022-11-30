@@ -2,12 +2,18 @@ package com.example.quizapp2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Random;
@@ -170,6 +176,13 @@ public class Playground extends AppCompatActivity {
     TimerTask timerTask;
     final Handler handler = new Handler();
 
+    Dialog dialog;
+
+    public  void goHome(View v) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 
     public void startTimer() {
         //set a new Timer
@@ -207,7 +220,6 @@ public class Playground extends AppCompatActivity {
                         }
                         timeLeft.setText(remTime+"");
                         remTime--;
-
                     }
                 });
             }
@@ -243,6 +255,24 @@ public class Playground extends AppCompatActivity {
 
         timeLeft = findViewById(R.id.timeLeft);
         timeLeft.setText(remTime + "s");
+
+
+        dialog = new Dialog(Playground.this);
+        dialog.setContentView(R.layout.score_popup);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+
+        Button closeButton = dialog.findViewById(R.id.btn_close);
+
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Playground.this, "closed", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
     }
 
     private int calcScore() {
@@ -257,7 +287,12 @@ public class Playground extends AppCompatActivity {
     public void submitQuestion(View view)
     {
         int correctAnswer = evaluateExpression(questionString);
-        int enteredAnswer = Integer.parseInt(userAnswer.getText().toString());
+        int enteredAnswer = 0;
+
+
+        enteredAnswer += Integer.parseInt(userAnswer.getText().toString());
+
+        stoptimertask();
 
         if(correctAnswer == enteredAnswer)
         {
@@ -266,9 +301,10 @@ public class Playground extends AppCompatActivity {
         }
 
         if(qnNoInt == qnCountInt) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-
+            TextView scoreDisplay = dialog.findViewById(R.id.scoreDisplay);
+            String str = (String) scoreDisplay.getText();
+            scoreDisplay.setText(str + Integer.toString(score));
+            dialog.show();
         }
 
         else {
@@ -319,18 +355,23 @@ public class Playground extends AppCompatActivity {
 
     protected void generateQuestion()
     {
-        if(qnNoInt == qnCountInt) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        if(qnNoInt == qnCountInt)
+        {
+            TextView scoreDisplay = dialog.findViewById(R.id.scoreDisplay);
+            String str = (String) scoreDisplay.getText();
+            scoreDisplay.setText(str + Integer.toString(score));
+            dialog.show();
         }
 
-        remTime = timePerQuestion;
-        questionString = generateExpression();
-        qnNoInt++;
+        if(qnNoInt < qnCountInt) {
+            remTime = timePerQuestion;
+            questionString = generateExpression();
+            qnNoInt++;
 
-        question.setText(questionString);
-        qnNo.setText(qnNoInt+"");
-        startTimer();
+            question.setText(questionString);
+            qnNo.setText(qnNoInt + "");
+            startTimer();
+        }
     }
 
 }
