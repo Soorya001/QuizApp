@@ -159,7 +159,8 @@ class EvaluateString
 
 
 public class Playground extends AppCompatActivity {
-    int num1 , num2 ;
+
+    int num1, num2 ;
     int op ;
     int score;
     int qnNoInt, qnCountInt;
@@ -268,7 +269,7 @@ public class Playground extends AppCompatActivity {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Playground.this, "closed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Playground.this, "thanks for playing!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -280,14 +281,12 @@ public class Playground extends AppCompatActivity {
         score = score * 10;
 
         return (int)score;
-
     }
 
     public void submitQuestion(View view)
     {
         int correctAnswer = evaluateExpression(questionString);
         int enteredAnswer = 0;
-
 
         enteredAnswer += Integer.parseInt(userAnswer.getText().toString());
 
@@ -371,7 +370,7 @@ public class Playground extends AppCompatActivity {
             qnNoInt++;
 
             question.setText(questionString);
-            qnNo.setText(qnNoInt + "");
+            qnNo.setText(qnNoInt + ".");
             startTimer();
         }
     }
